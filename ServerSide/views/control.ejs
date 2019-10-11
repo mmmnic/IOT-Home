@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>IT_PROJECT_SOLUTION</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type ="text/css" href="css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <!-- <script>
+            $(document).ready(function(){
+                setInterval(function(){ 
+                    location.reload();
+                    }, 3000);
+            });
+         </script> -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            $(document).ready(function(){
+                var socket = io();
+
+                // Interval 3s get status
+                setInterval(function(){ 
+                    socket.emit('status-all', "hello");
+                }, 1000);
+
+                socket.on('status-all',function(msg){
+                    // console.log(msg[1]);
+                    $("#CC_Status").html(msg[0].STATUS);
+                    $("#CN_Status").html(msg[1].STATUS);
+
+                    $("#NB_Status").html(msg[2].STATUS);
+                    $("#NB_Gas").html('GAS: ' + msg[2].GAS);
+                    
+                    $("#NK_Status").html(msg[3].STATUS);
+                    $("#NK_Temperature").html('TEMPERATURE: ' + msg[3].TEMP);
+
+                    $("#PN_Status").html(msg[4].STATUS);
+
+                    $("#PT_Status").html(msg[5].STATUS);
+
+                    $("#PD_Status").html(msg[6].STATUS);
+                    $("#PD_Rain").html(msg[6].RAIN);
+
+                    $("#GR_Status").html(msg[7].STATUS);
+                });
+                
+                socket.on('user-chat', function(msg){
+                    $('#response').append(msg + "\n");
+                    console.log(msg);
+                    // alert("The paragraph was clicked.");
+                });
+                
+                $("#sayhi").click(function(){
+                    var iotObject = {
+                        IDNODE: "NB",
+                        TEMP: 0,
+                        HUMI: 0,
+                        GAS: 50,
+                        RAIN: 0,
+                        COMMAND: 5,
+                        STATUS: "NONE"
+                    };
+                    var strJson = JSON.stringify(iotObject);
+                    socket.emit('chat-message', strJson);
+                    // alert("The paragraph was clicked.");
+                });
+                
+                $("#CC_Door_Btn").click(function(){
+                    socket.emit('user-chat', 'CC_Door');
+                });
+                $("#CC_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'CC_Light');
+                });
+
+                $("#CN_Door_Btn").click(function(){
+                    socket.emit('user-chat', 'CN_Door');
+                });
+                $("#CN_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'CN_Light');
+                });
+
+                $("#NB_Door_Btn").click(function(){
+                    socket.emit('user-chat', 'NB_Door');
+                });
+                $("#NB_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'NB_Light');
+                });
+                $("#NB_Fan_Btn").click(function(){
+                    socket.emit('user-chat', 'NB_Fan');
+                });
+                $("#NK_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'NK_Light');
+                });
+                $("#NK_Fan_Btn").click(function(){
+                    socket.emit('user-chat', 'NK_Fan');
+                });
+                $("#PN_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'PN_Light');
+                });
+                $("#PN_Fan_Btn").click(function(){
+                    socket.emit('user-chat', 'PN_Fan');
+                });
+                $("#PT_Light_Btn").click(function(){
+                    socket.emit('user-chat', 'PT_Light');
+                });
+                $("#PD_Door_Btn").click(function(){
+                    socket.emit('user-chat', 'PD_Door');
+                });
+                $("#GR_Door_Btn").click(function(){
+                    socket.emit('user-chat', 'GR_Door');
+                });
+            });
+            
+        </script>
+    </head>
+    <body>
+      <div class="container">
+          <h1 style="text-align:center">CONTROLLER</h1>
+          <div class="form-group">
+                <button id="sayhi" type="button" class="btn btn-info">Say Hi</button>
+          </div>
+          <div class="form-group">
+                <label for="response">Response:</label>
+                <textarea class="form-control" rows="5" id="response"></textarea>
+          </div>
+        </div>
+        <!-- Cửa -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Cửa</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Cửa cổng</div>
+                        <div class="panel-body" id="CC_Status">Nothing</div>
+                        <div class="panel-body">
+                            <button id="CC_Door_Btn" type="button" class="btn btn-default">Change State Cửa</button>
+                            <button id="CC_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Cửa nhà</div>
+                        <div class="panel-body" id="CN_Status">Nothing</div>
+                        <div class="panel-body">
+                            <button id="CN_Door_Btn" type="button" class="btn btn-default">Change State Cửa</button>
+                            <button id="CN_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Nhà Bếp -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Bếp</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Nhà Bếp</div>
+                        <div class="panel-body" id="NB_Status">Nothing</div>
+                        <div class="panel-body" id="NB_Gas">Nothing</div>
+                        <div class="panel-body">
+                            <button id="NB_Door_Btn" type="button" class="btn btn-default">Change State Cửa Sổ</button>
+                            <button id="NB_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                            <button id="NB_Fan_Btn" type="button" class="btn btn-default">Change State Quạt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Nhà Khách -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Phòng khách</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Phòng khách</div>
+                        <div class="panel-body" id="NK_Status">Nothing</div>
+                        <div class="panel-body" id="NK_Temperature">Nothing</div>
+                        <div class="panel-body">
+                            <button id="NK_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                            <button id="NK_Fan_Btn" type="button" class="btn btn-default">Change State Quạt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Phòng ngủ -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Phòng ngủ</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Phòng ngủ</div>
+                        <div class="panel-body" id="PN_Status">Nothing</div>
+                        <div class="panel-body">
+                            <button id="PN_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                            <button id="PN_Fan_Btn" type="button" class="btn btn-default">Change State Quạt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Phòng tắm -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Phòng tắm</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Phòng tắm</div>
+                        <div class="panel-body" id="PT_Status">Nothing</div>
+                        <div class="panel-body">
+                            <button id="PT_Light_Btn" type="button" class="btn btn-default">Change State Đèn</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Chỗ Phơi đồ -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Chỗ phơi đồ</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Phơi đồ</div>
+                        <div class="panel-body" id="PD_Status">Nothing</div>
+                        <div class="panel-body" id="PD_Rain">Nothing</div>
+                        <div class="panel-body">
+                            <button id="PD_Door_Btn" type="button" class="btn btn-default">Change State Cửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Gara -->
+        <div class="container" style="text-align: center">
+            <h3 style="text-align: center" id="logo">Gara</h3>
+            <div class="row" >
+                <div class="col-sm-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Phòng khách</div>
+                        <div class="panel-body" id="GR_Status">Nothing</div>
+                        <div class="panel-body">
+                            <button id="GR_Door_Btn" type="button" class="btn btn-default">Change State Cửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
