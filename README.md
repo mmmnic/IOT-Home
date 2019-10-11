@@ -16,7 +16,7 @@ COMMAND: 1/2 = Cửa ON/OFF; 3/4 = Đèn ON/OFF; 5/6 = Quạt ON/OFF
 
 Note: I was granted permission by my team to put this repo to my personal git for my other intent.
 Thanks to my teammates: Hao, Nhu, Thuc, Khoa
-https://github.com/vanhao051212
-https://github.com/ngonhu159
-https://github.com/wathui99
-https://github.com/fxanhkhoa
+https://github.com/vanhao051212; 
+https://github.com/ngonhu159; 
+https://github.com/wathui99; 
+https://github.com/fxanhkhoa;
