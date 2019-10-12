@@ -11,6 +11,8 @@ This is about an IOT Home (smart home) that can control through website.
 Functions:
 All devices are controled through website, some can be control by perripheral devices such as, keypad, switch, etc...
 
+Realtime update devices status.
+
 detect gas leak, air humid, room temperature, rain.
 
 When rain is detected cloth hangers are pulled inside house.
